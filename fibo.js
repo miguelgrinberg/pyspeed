@@ -7,6 +7,13 @@ const fibo = n => {
   }
 }
 
-for (let n of process.argv.slice(2)) {
-  console.log(`fibo(${n}) = ${fibo(n)}`);
+const label = process.argv[2];
+const n = process.argv[3];
+let sum = 0;
+for (let i = 0; i < 3; i++) {
+  const start = Number(process.hrtime.bigint() / 100000n) / 10000;
+  fibo(n);
+  const end = Number(process.hrtime.bigint() / 100000n) / 10000;
+  sum += end - start;
 }
+console.log(parseInt(sum / 3 * 10000) / 10000, label);
