@@ -33,6 +33,9 @@ run() {
         # rust
         rustc -O $APP.rs
         ./$APP "rust$RUST_VERSION" $*
+
+        # Elixir (version emitted by script)
+        elixir $APP.exs $2
     fi
 
     echo ""
