@@ -30,4 +30,4 @@ if __name__ == '__main__':
         end = time.time()
         sum += end - start
     avg = sum / 3
-    print(f'{avg:.04f} {label}')
+    print(f'{label},{avg:.04f}')

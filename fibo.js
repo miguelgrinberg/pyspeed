@@ -16,4 +16,4 @@ for (let i = 0; i < 3; i++) {
   const end = Number(process.hrtime.bigint() / 100000n) / 10000;
   sum += end - start;
 }
-console.log(parseInt(sum / 3 * 10000) / 10000, label);
+console.log(label + "," + (parseInt(sum / 3 * 10000) / 10000).toString());

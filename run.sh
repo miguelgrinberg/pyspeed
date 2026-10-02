@@ -1,9 +1,7 @@
 #!/bin/bash
 source versions.sh
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-export PATH=$PATH:$HOME/.cargo/bin
+NODE_VERSION=$(node --version | grep -o "[1-9]\+\.[0-9]\+")
 RUST_VERSION=$(rustc --version | grep -o "[1-9]\+\.[0-9]\+")
 
 run() {
@@ -19,21 +17,26 @@ run() {
 
     # python
     for VERSION in $PY_VERSIONS; do
-        export UV_PYTHON=$VERSION
-        venv/bin/uv run python $APP.py $VERSION $*
-        if [[ $PYJIT_VERSIONS =~ $VERSION ]]; then
-            PYTHON_JIT=1 venv/bin/uv run python $APP.py ${VERSION}jit $*
+        if [[ "$VERSION" =~ pypy ]]; then
+            $VERSION $APP.py $VERSION $*
+        else
+            python$VERSION $APP.py $VERSION $*
         fi
     done
 
     if [ "$1" == "1" ]; then
         # node
-        node $APP.js "node$NODE_VERSION" $*
+        node $APP.js "node-$NODE_VERSION" $2
 
         # rust
         rustc -O $APP.rs
-        ./$APP "rust$RUST_VERSION" $*
+        ./$APP "rust-$RUST_VERSION" $2
     fi
+
+    for VERSION in $PYEXTRA_VERSIONS; do
+        PYTHON_JIT=1 python$VERSION $APP.py "${VERSION} jit" $*
+        python${VERSION}t $APP.py "${VERSION} ft" $*
+    done
 
     echo ""
 }

@@ -20,5 +20,5 @@ pub fn main() {
         let dur = start.elapsed();
         sum += dur.as_secs_f64();
     }
-    println!("{:.4} {}", sum / 3.0, label);
+    println!("{},{:.4}", label, sum / 3.0);
 }
